@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Stick Master RPG</title>
+	<link rel="stylesheet" href="framework.css">
+	<link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div id="app">
+
+	<!--
+
+		PAGES:
+		- main-menu
+		- create-char
+		- scene-1
+		- grove
+
+	-->
+
+	<div class="page main-menu" v-if="page == 'main-menu'">
+		<div> <!-- flex item -->
+			<h1 class="main-menu__title" title="Stick Master RPG">| Stick Master RPG |</h1>
+			<div class="scene-0">
+				<p class="text-lg">Once upon a time, there was a child.<br> Like another child, he has a dream that is always kept.<br><br> What he already knows is,<br>no dreams come true without <strong>the first small step</strong>,<br>and this is about it. ...</p>
+			</div>
+			<button class="play-btn btn--big" @click="beginHandle" title="Begin the small step!">Begin</button>
+		</div>
+	</div>
+
+	<div class="page create-char" v-if="page == 'create-char'">
+		<div class="form">
+			<h3 class="create-char__title">Create your character</h3>
+
+			<div class="form-groups">
+				<div class="form-group">
+					<label for="name">Name</label><br><br>
+					<input type="text" placeholder="name" v-model="char.name" title="Insert your character's name">
+				</div>
+
+				<hr>
+
+				<div class="form-group">
+					<label for="symbol" title="Symbol will represent your character in the game">Symbol</label><br><br>
+					<div class="symbols">
+						<template v-for="symbol in symbols">
+							<button v-bind:class="char.symbol == symbol ? 'selected' : 'symbol' " @click="char.symbol = symbol">
+								<span v-html="symbol"></span>
+							</button>
+						</template>
+					</div>
+				</div>
+
+				<hr>
+
+				<div class="form-group">
+					<label for="color" title="Choose a color as a background to your symbol and the environment aura">Color</label><br><br>
+					<div class="colors">
+						<template v-for="color in colors">
+							<button v-bind:class="char.color == color ? 'selected' : 'color' " @click="char.color = color" v-bind:style="{ backgroundColor : color}">
+							</button>
+						</template>
+					</div>
+				</div>
+
+				<hr>
+
+				<div class="form-group btn-wrapper">
+					<button @click="randomChar" title="Generate a random character">random</button>
+					<button @click="createdHandle" title="Create now!">create</button>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="preview" title="This is how your character looks on the map">
+			<div class="char-container">
+				<h1 class="char" v-bind:style="{backgroundColor: char.color}"><span v-html="char.symbol"></span></h1>
+			</div>
+		</div>
+	</div>
+
+	<transition name="enterfade">
+	<div class="page scene-1" v-if="page == 'scene-1'">
+		<p style="margin-bottom: 1rem">
+			His name is &nbsp;<span class="char" v-bind:style="{backgroundColor: char.color}"><span v-html="char.symbol"></span></span><strong>
+			{{char.name}}</strong>. <br>
+			Just a child from the Orcs World, <br>
+			who dreamed to be an Orc warrior and slay monsters.
+		</p>
+		<p>
+			But, little &nbsp;{{char.name}}&nbsp; can't hold an axe or hammer. <br>
+			So he went to &nbsp;{{environment.name}}, <br>
+			craft a stick, <br>
+			and hit <strong>anything</strong> he want..
+		</p>
+		<button class="btn--big" @click="startGame" title="Let's start your adventure!">start</button>
+	</div>
+	</transition>
+
+	<transition name="enterfade">
+	<div class="page grove" v-if="page == 'grove'">
+		<div class="popup" v-show="howtoplayPopup">
+			<h3 style="margin-bottom: 20px">How to play</h3>
+			<div class="flex">
+				<div style="border: 1px solid saddlebrown; padding: 5px;">
+					<span class="char" v-bind:style="{backgroundColor: char.color}"><span v-html="char.symbol"></span></span> is you.
+				</div>
+				<div v-if="enemy" style="border: 1px solid saddlebrown; padding: 5px;">
+					<span class="enemy">=</span> is a &nbsp;<span>{{enemy.name}}</span>. <span v-if="!enemy.tamed">Watch out. He bites.</span>
+				</div>
+			</div>
+			<hr>
+			<div style="margin: 10px 0">
+				<strong>W, A, S, D</strong> or <strong>Arrows</strong> to move around.
+			</div>
+			<hr>
+			<div style="margin: 10px 0">
+				Crafting need <strong>two</strong> items.
+			</div>
+			<hr>
+			<div style="margin: 10px 0">
+				Hitting anything and walking somewhere, will gain exp. Even so, stay wise and alert.
+			</div>
+			<hr>
+			<div class="flex">
+				<div style="border: 1px solid saddlebrown; padding: 5px;">
+					Win condition: <strong>1000 exp</strong>.
+				</div>
+				<div v-if="enemy" style="border: 1px solid saddlebrown; padding: 5px;">
+					Lose condition: <strong>0 health</strong>.
+				</div>
+			</div>
+			<hr>
+			<div style="margin: 10px 0" class="ps">
+				ps: don't hit something with your bare hands.
+			</div>
+			<hr>
+			<div>
+				<button @click="howtoplayPopup = !howtoplayPopup">close</button>
+			</div>
+		</div>
+
+		<div class="sidebar">
+			<!-- Character Info -->
+			<div class="char-info">
+				<h5 title="This is your character's name">
+					<small class="char" v-bind:style="{backgroundColor: char.color}"><span v-html="char.symbol"></span></small> {{char.name}}
+				</h5>
+				<hr>
+
+				<!-- Health -->
+				<div class="health-bar-container" title="This is your health. You will lose if you run out of it">
+					<div class="health-bar" v-bind:style="{width: char.health+'%'}"></div>
+				</div>
+				<small class="small">Health: &nbsp;{{char.health}} / 100</small>
+				<hr>
+
+				<!-- Experience -->
+				<div class="exp-bar-container" title="This is your experience. Hit anything you can hit to get 1000 exp and win the game">
+					<div class="exp-bar" v-bind:style="{width: char.exp/char.max_exp*100+'%'}"></div>
+				</div>
+				<small class="small">Experience: </small><span style="display: inline-block;"> &nbsp;{{char.exp}} / {{char.max_exp}}</span>
+				<hr>
+
+				<!-- Damage -->
+				<small class="small" title="This is your damage, based on your experience with sticks">Damage: &nbsp;<strong>{{char.damage | format}}</strong></small>
+			</div>
+
+			<!-- Stick Info -->
+			<div class="stick-info">
+				<div v-if="char.stick">
+					<h6 title="Your stick">{{char.stick.name}}</h6>
+					<hr>
+
+					<!-- Stick Bar -->
+					<div class="stick-bar-container" title="Your stick's condition">
+						<div class="stick-bar" v-bind:style="{width: char.stick.condition/char.stick.max_condition*100+'%'}"></div>
+					</div>
+					<small style="font-size: 0.8em">condition: &nbsp;{{char.stick.condition | format}} / {{ char.stick.max_condition }}</small>
+
+					<br><br>
+					<button @click="dropStick(); playAudio('click')" title="Drop your stick">drop</button>
+
+					<button v-if="lookat == 'area'" @click="addToSlot(char.stick, 'hand', null)" ref="recraft" title="Recondition. The result is depend on the materials">
+						<span v-if="char.stick.custom">recraft</span>
+						<span v-else><small class="small">select to craft</small></span>
+						<span v-if="showShortcut">(r)</span>
+					</button>
+
+					<button v-if="char.stick.custom && !isRenaming" @click="isRenaming = true" title="Name your stick as you please">rename</button>
+
+					<div> <!-- Rename Form -->
+						<input type="text" v-model="char.stick.name" v-if="isRenaming">
+						<button @click="char.stick.rename(char.stick.name); isRenaming = false" v-if="isRenaming">done</button>
+					</div>
+				</div>
+				<div v-else><i title="You dont hold any sticks">no stick. (bare hands)</i></div>
+			</div>
+
+			<!-- Crafting -->
+			<div class="crafting" v-if="isCrafting" title="Select the best materials you can find">
+				<h6>Crafting</h6>
+				<i class="small">select two items</i>
+				<table>
+					<tbody>
+						<tr v-for="(slot,i) in craftingSlot">
+							<td v-if="slot.item">{{slot.item.name}}</td>
+							<td>
+								<button @click="drop(slot, i); playAudio('click')" title="Remove from crafting slot">drop</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="btn-wrapper">
+					<button v-if="craftingSlot.length == 2" @click="craft(); playAudio('craft')" ref="craft" title="Craft now!">craft! <span v-if="showShortcut">(spacebar)</span></button>
+				</div>
+			</div>
+
+			<div class="help" v-if="!isCrafting">
+				<!-- <button class="help-btn" @click="showHelp = !showHelp" title="Toggle help">
+					<span v-if="showHelp">hide note</span>
+					<span v-if="!showHelp">read note</span>
+				</button>
+				&nbsp; -->
+				<button class="help-btn" @click="showShortcut = !showShortcut" title="Toggle shortcut">
+					<span v-if="showShortcut">hide shortcut</span>
+					<span v-if="!showShortcut">show shortcut</span>
+				</button>
+
+				<div class="help-ul-wrapper" v-if="showHelp" title="If at any time you need a help">
+					<button class="btn--big" @click="howtoplayPopup = !howtoplayPopup">HOW TO PLAY?</button>
+					<!-- <h6>Note <small class="small">(from the Dev)</small></h6>
+					<ul>
+						<li>
+							<span class="char" v-bind:style="{backgroundColor: char.color}"><span v-html="char.symbol"></span></span> is you.
+						</li>
+						<li v-if="enemy">
+							<span class="enemy">=</span> is a &nbsp;<span>{{enemy.name}}</span>. <span v-if="!enemy.tamed">Watch out. <br>He bites.</span>
+						</li>
+						<li>W, A, S, D to move around.</li>
+						<li>Crafting need 2 items.</li>
+						<li>Hitting anything and walking somewhere, will gain exp.</li>
+						<li>Even so, stay wise and alert.</li>
+						<li>Win condition: 1000 exp.</li>
+						<li>Lose condition: 0 health.</li>
+						<li class="ps">ps: don't hit something with your bare hands.</li>
+					</ul> -->
+				</div>
+			</div>
+		</div> <!-- sidebar end -->
+
+		<div class="main">
+			<div style="display: flex; justify-content: space-between; align-items: flex-end;">
+				<div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+					<!-- Map -->
+					<div class="map" title="This is the map. Try to move with W, A, S, D or arrows">
+						<template v-for="(tile, i) in map">
+							<!-- <div v-bind:class="tile.isEdge ? 'edge-tile' : 'tile'" :key="i"> -->
+							<div class="tile" v-bind:class="{'edge-tile': tile.isEdge, 'marked-tile': tile.marked}" v-bind:style="{borderColor: char.color}" :key="i">
+
+								<!-- Character Icon -->
+								<span v-if="char.position == i" title="Your character">
+									<b class="char" v-bind:style="{backgroundColor: char.color}"><span v-html="char.symbol"></span></b>
+								</span>
+
+								<!-- Enemy Icon -->
+								<span v-if="enemy && enemy.position == i" title="..." v-bind:style="{backgroundColor: enemy.color}"><b class="enemy">=</b></span>
+
+								<!-- <span v-if="enemy1 && enemy1.position == i" title="..."><b class="enemy">=</b></span> -->
+							</div>
+						</template>
+					</div>
+				</div>
+
+				<!-- Logger -->
+				<div style="width:150px;" class="logger" ref="logWindow" title="Your log">
+					<ul><li style="margin: 0 0 5px" v-for="msg in logMessages">- {{msg}}</li></ul>
+				</div>
+			</div>
+
+			<hr>
+
+			<!-- Actions -->
+			<div v-if="!isRenaming" class="text-center"> <!-- Action Buttons -->
+				<div v-if="enemy">
+					<button v-if="isBattling && enemy && !enemy.tamed" @click="char.hit(enemy); playAudio('cat')">attack &nbsp;{{enemy.name}}</button>
+
+					<button v-if="isBattling && enemy && !enemy.observed" @click="char.observe(enemy); playAudio('click');">observe &nbsp;{{enemy.name}}</button>
+
+					<button v-if="isBattling && enemy && enemy.observed && !enemy.tamed" @click="char.tame(enemy); playAudio('click')">tame &nbsp;{{enemy.name}}</button>
+				</div>
+
+				<hr v-if="isBattling">
+
+				<button v-show="lookat != 'area'" @click="searchArea(char.position)" ref="lookAround">look around <span v-if="showShortcut">('q' or 'e')</span></button>
+
+				<button @click="markArea(char.position)" ref="marker" style="min-width: 97.25px;" title="Draw a mark on the ground">
+					<span v-if="map[char.position] && map[char.position].marked == false">
+						mark <span v-if="showShortcut">(f)</span>
+					</span>
+					<span v-else>
+						unmark <span v-if="showShortcut">(f)</span>
+					</span>
+				</button>
+
+				<template v-if="enemy">
+					<button v-show="enemy && enemy.tamed && !isCrafting" @click="char.heal()">pet &nbsp;{{enemy.name}}</button>
+				</template>
+
+				<button v-show="showCraftBtn" @click="isCrafting = !isCrafting" ref="showCraft" title="Create a custom stick">
+					<span v-if="!isCrafting">craft</span>
+					<span v-if="isCrafting">cancel</span>
+					<span v-if="showShortcut">(c)</span>
+				</button>
+			</div>
+
+			<div style="display: flex; justify-content: center; align-items: center;">
+				<!-- Area -->
+				<div class="area" v-if="lookat == 'area'">
+					<table>
+						<tbody>
+							<template v-for="(thing, i) in selectedArea.items">
+
+								<!-- Item -->
+								<tr v-if="thing">
+									<td>
+										<div class="item-bar-container">
+											<div class="item-bar" v-bind:style="{width: thing.condition/thing.max_condition*100+'%'}"></div>
+										</div>
+										{{thing.name}}
+									</td>
+
+									<td v-if="!isCrafting">
+										<button class="crosshair" @click="char.hit(thing); playAudio(thing.name)">hit</button>
+									</td>
+									<td v-if="thing.holdable && !char.stick && !isCrafting">
+										<button @click="char.hold(thing, selectedArea.items); playAudio('click')">get & hold</button>
+									</td>
+									<td v-if="isCrafting && craftingSlot.length<2">
+										<button @click="addToSlot(thing, 'ground', i); playAudio('click')">select to be craft</button>
+									</td>
+								</tr>
+
+								<tr v-else>
+									<td title="Nothing in this area">nothing.</td>
+								</tr>
+
+							</template>
+							<tr v-if="selectedArea.items.length==0">
+								<td title="Nothing in this area">nothing.</td>
+							</tr>
+						</tbody>
+					</table>
+				</div> <!-- Area end-->
+			</div>
+		</div> <!-- main end-->
+
+	</div> <!-- grove end-->
+	</transition>
+
+	<transition name="enterfade">
+	<div class="page game-over" v-if="gameIsOver">
+		<!-- Win -->
+		<div class="scene-2" v-if="win" title="The game is over. Thank you so much for playing!">
+			<p>
+				... after a while, little &nbsp;{{char.name}}&nbsp; began to master the skill of playing and crafting the stick. And now he is known by the nickname of ... <br> <strong class="text-gold">"Stick Master"</strong>.
+			</p>
+
+			<hr>
+
+			<h5><b class="char" v-bind:style="{backgroundColor: char.color}"><span v-html="char.symbol"></span></b> {{char.name}}</h5>
+			<br>
+			<ul>
+				<li>Time Played: &nbsp;{{timeCount}}&nbsp; seconds</li>
+				<li>Stick Crafted: &nbsp;{{sticksCount}}&nbsp; sticks</li>
+				<li>Moves: &nbsp;{{moveCount}}</li>
+				<li>Clicks: &nbsp;{{clickCount}}</li>
+				<li class="text-gold" v-if="enemyKilled">
+					<span v-if="enemy">&nbsp;{{enemy.name}}&nbsp;</span><span v-else>Wildcat</span> Killer</li>
+				<li class="text-gold" v-if="enemyTamed"><span v-if="enemy">&nbsp;{{enemy.name}}&nbsp;</span><span v-else>Wildcat</span> Tamer</li>
+				<li class="text-gold" v-if="allAreaMarked">&nbsp;{{environment.name}}&nbsp; Explorer</li>
+				<li class="text-gold" v-if="sticksCount>50">Expert Craftsboy</li>
+			</ul>
+		</div>
+
+		<!-- Lose -->
+		<div class="scene-2" title="Go to main menu and play again to explore all the possibilities!" v-else>
+			<p>... after a while, he died. Not just unable to use an axe or hammer, he also cannot use a stick. <br>R.I.P<br>Little &nbsp;<span class="char"><span v-html="char.symbol"></span></span> {{char.name}}, the "Stuck Master".</p>
+		</div>
+
+		<br>
+		<button @click="resetWindow" title="Go to main menu">Main Menu</button>
+	</div>
+	</transition>
+
+	<div class="mute-container">
+		<span v-if="showCredits" style="font-size: 0.9em; color: #aaa">(12/09/19) | Special thanks to: <span style="font-weight: 700"></span>brokeman11</span>
+		<button @click="mute('sound')" title="Toggle Sound Effect">
+			<span v-if="!muteSound">&#128266;</span>
+			<span v-else><strike>&#128266;</strike></span>
+		</button>
+		<button @click="mute('music')" title="Toggle Music">
+			<span v-if="!muteMusic">&#9835;</span>
+			<span v-else><strike>&#9835;</strike></span>
+		</button>
+		<button @click="showCredits = !showCredits" v-if="page == 'main-menu'" title="Information">
+			<span v-if="!showCredits">&#8505;</span>
+			<span v-else><strike>&#8505;</strike></span>
+		</button>
+		<audio src="stickMaster.wav" ref="bgm" loop></audio>
+		<audio src="click.wav" ref="click"></audio>
+		<audio src="hover.wav" ref="hover"></audio>
+	</div>
+
+	<!-- freesound.org
+	joedeshon - wooden-ball-against-wooden-window-shade
+	christopherderp - videogame-menu-button-click -->
+</div>
+<script src="vue.js"></script>
+<script src="database.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+var _things = [
+	{
+		name: 'Grass',
+		health: 1,
+		size: 1,
+		chance: 98,
+		max_amount: 99,
+		holdable: false
+	},
+	{
+		name: 'Vines',
+		health: 1,
+		size: 2,
+		chance: 90,
+		max_amount: 10,
+		holdable: false
+	},
+	{
+		name: 'Leaves',
+		health: 1,
+		size: 1,
+		chance: 98,
+		max_amount: 30,
+		holdable: false
+	},
+	{
+		name: 'Twig',
+		health: 2,
+		size: 2,
+		chance: 90,
+		max_amount: 15,
+		holdable: true
+	},
+	{
+		name: 'Branch',
+		health: 4,
+		size: 4,
+		chance: 80,
+		max_amount: 5,
+		holdable: true
+	},
+	{
+		name: 'Bough',
+		health: 6,
+		size: 6,
+		chance: 60,
+		max_amount: 2,
+		holdable: false
+	},
+	{
+		name: 'Trunk',
+		health: 8,
+		size: 8,
+		chance: 50,
+		max_amount: 1,
+		holdable: false
+	},
+	{
+		name: 'Log',
+		health: 15,
+		size: 15,
+		chance: 30,
+		max_amount: 1,
+		holdable: false
+	},
+	{
+		name: 'Tree',
+		health: 100,
+		size: 20,
+		chance: 80,
+		max_amount: 1,
+		holdable: false
+	}
+];
+
+function Bag(name, cap){
+	this.name = name;
+	this.capacity = cap;
+	this.items = [];
+
+	return this;
+}
+
+var _bags = [
+	new Bag('Small Pouch', 2),
+	new Bag('Pouch', 4),
+	new Bag('Large Pouch', 6),
+	new Bag('Small Satchel', 8),
+	new Bag('Satchel', 10),
+	new Bag('Large Satchel', 12),
+	new Bag('Small Backpack', 14),
+	new Bag('Backpack', 16),
+	new Bag('Large Backpack', 18),
+	new Bag('Huge Backpack', 20)
+];
+
+function setEdges(){
+	var _edges = {
+		east: [],
+		west: [],
+		north: [],
+		south: []
+	}
+
+	for (var i = 8; i <= 80; i+=9) {
+		_edges.east.push(i);
+	}
+	for (var i = 0; i <= 72; i+=9) {
+		_edges.west.push(i);
+	}
+	for (var i = 0; i <= 8; i++) {
+		_edges.north.push(i);
+	}
+	for (var i = 72; i <= 80; i++) {
+		_edges.south.push(i);
+	}
+
+	return _edges;
+}
+
+// set edges
+		for (var i = 8; i <= 80; i+=9) {
+			this.edges.east.push(i);
+		}
+		for (var i = 0; i <= 72; i+=9) {
+			this.edges.west.push(i);
+		}
+		for (var i = 0; i <= 8; i++) {
+			this.edges.north.push(i);
+		}
+		for (var i = 72; i <= 80; i++) {
+			this.edges.south.push(i);
+		}
+
+		<!-- Bag -->
+			<!-- <div class="window" v-if="lookat == 'bag'">
+				bag <br>
+				{{char.bag.name}}
+				<br>
+				{{char.bag.items.length}}/{{char.bag.capacity}}
+				<br>
+				<ul>
+					<li v-for="item in char.bag.items">
+						{{item}} <button>drop</button><button>drop all</button>
+					</li>
+				</ul>
+			</div> -->

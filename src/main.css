@@ -1,0 +1,499 @@
+#app {
+	display: none;
+}
+
+.btn--big {
+	padding: 1rem 3rem;
+	font-size: 1.25em;
+}
+
+.title {
+	color: rgba(0,0,0,0.75);
+}
+
+.play-btn {
+	margin-top: 2rem;
+	animation: heartbeat 1s ease-in-out infinite;
+}
+
+.char {
+	background-color: black;
+	color: #fff;
+}
+
+.enemy {
+	background-color: red;
+	color: gold;
+}
+
+/*MAIN*/
+.main-menu {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	padding-top: 120px !important;
+}
+
+.main-menu__title {
+	font-size: 3em;
+	margin-bottom: 30px;
+}
+
+/* CREATE CHARACTER */
+.create-char {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.create-char__title {
+	font-size: 2em;
+	color: wheat;
+	text-align: center;
+	margin: 1.25rem 0;
+}
+
+.create-char .form {
+	width: 50%;
+	background-color: saddlebrown;
+	padding: .5rem;
+	box-shadow: 2px 2px 10px saddlebrown;
+}
+
+.create-char .form .title {
+	margin-bottom: 2rem;
+	text-align: center;
+}
+
+.create-char .form hr {
+	border-color: saddlebrown;
+}
+
+.create-char .form-groups {
+	padding: .5rem;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.create-char label {
+	color: burlywood;
+}
+
+.create-char .symbols {
+	display: flex;
+	justify-content: space-around;
+}
+
+.create-char .symbol {
+	background-color: none;
+	color: burlywood;
+	font-size: 1.5em;
+	padding: .5rem;
+	border: 2px solid rgba(0,0,0,0);
+}
+
+.create-char .symbols .selected {
+	font-size: 1.2em;
+	padding: .5rem;
+	border: 2px solid black;
+	color: black;
+}
+
+.create-char .colors {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+
+.create-char .color {
+	width: 30px;
+	height: 30px;
+	padding: 0;
+	box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+}
+
+.create-char .colors .selected {
+	border: 2px solid black;
+	padding: 0;
+	width: 30px;
+	height: 30px;
+}
+
+.create-char input {
+	/*background-color: rgba(255, 255, 255, 0.4);*/
+	background-color: burlywood;
+	border: none;
+	width: 100%;
+	font-size: 1.25em;
+}
+
+.create-char .preview {
+	width: 50%;
+	text-align: center;
+}
+
+.create-char .preview .char-container {
+	border: 3px dashed green;
+	background-color: #000;
+	padding: 1rem;
+	width: 100px;
+	margin: auto;
+}
+
+.create-char .preview h1 {
+	animation: heartbeat 1s ease-in-out infinite;
+}
+
+.create-char .preview .char {
+	display: inline-block;
+}
+
+.create-char .btn-wrapper {
+	text-align: right;
+}
+
+.form-group {
+	padding: .5rem 0;
+}
+
+/*GROVE*/
+.map {
+	width: 290px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	border: 2px double green;
+	background-color: #111;
+	box-shadow: 2px 2px 10px saddlebrown;
+}
+
+.tile {
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	padding-top: 6px;
+	border: 1px dashed green;
+}
+
+.edge-tile {
+	border: 1px dotted lightgreen;
+}
+
+.marked-tile {
+	border: 2px solid lightgrey;
+}
+
+.grove {
+	display: flex;
+	height: 100vh;
+}
+
+.grove .sidebar {
+	width: 30%;
+	padding: .5rem;
+	background-color: saddlebrown;
+	color: burlywood;
+}
+
+.grove .sidebar button {
+	background-color: burlywood;
+	color: saddlebrown;
+}
+
+.grove .main {
+	padding: 1rem;
+	width: 70%;
+	background: linear-gradient(30deg, #111, #333);
+	color: burlywood;
+}
+
+.grove .main .title {
+	text-align: center; 
+	margin-bottom: 1rem; 
+	color: rgba(0,0,0,0.9); 
+	letter-spacing: 1px;
+}
+
+.grove .main button {
+	box-shadow: 2px 2px 5px saddlebrown;
+}
+
+.area {
+	height: 190px;
+	overflow-y: auto;
+	margin-top: 15px;
+}
+
+.area table {
+	font-size: 0.8em;
+}
+
+.area button {
+	padding: 3px;
+}
+
+.logger {
+	margin-top: 15px;
+	width: 100%;
+	height: 240px;
+	overflow-y: auto;
+	font-size: 0.8em;
+	padding: 1rem 5px;
+	background-color: #000;
+}
+
+.grove table {
+	margin: auto;
+	margin-top: 1rem;
+}
+
+.grove .main table td {
+	border: 1px solid #333;
+}
+
+.grove .char-info {
+	background-color: rgba(0,0,0,0.3);
+	border: 1px solid rgba(0,0,0,0.4);
+	padding: .5rem;
+}
+
+.grove .char-info .small {
+	font-size: 0.8em;
+}
+
+.grove .stick-info {
+	margin: 1rem 0;
+	background-color: rgba(0,0,0,0.3);
+	border: 1px solid rgba(0,0,0,0.4);
+	padding: .5rem;
+	min-height: 118px;
+}
+
+.grove .stick-info hr {
+	border-color: burlywood;
+}
+
+.grove .stick-info input {
+	color: white !important;
+}
+
+.grove .crafting {
+	background-color: rgba(0,0,0,0.3);
+	border: 1px solid rgba(0,0,0,0.4);
+	padding: .5rem;
+}
+
+.grove .crafting .btn-wrapper {
+	text-align: center; 
+	margin-top: 1rem;
+}
+
+.crafting table {
+	text-align: center;
+	width: 100%;
+}
+
+.crafting td {
+	background-color: rgba(0,0,0,0.3);
+	border: 1px solid rgba(0,0,0,0.4);
+}
+
+.help-btn {
+	padding: 0;
+	margin-bottom: .25rem;
+}
+
+.help .help-ul-wrapper {
+	margin-top: .25rem;
+}
+
+.help ul {
+	padding-left: 1.5rem;
+}
+
+.help li {
+	margin: .25rem 0;
+	list-style-type: circle;
+	font-size: 0.8em;
+}
+
+.help .ps {
+	margin-top: 5px; 
+	font-size: 0.8em;
+}
+
+.help .small {
+	font-size: 0.5em;
+}
+
+.crafting td button,
+.stick-info button,
+.stick-info input {
+	padding: 2px;
+}
+
+.health-bar-container {
+	background-color: darkred;
+	height: 10px;
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+	margin-top: .5rem
+}
+
+.health-bar {
+	background-color: rgba(255, 0, 0, 0.8);
+	position: absolute;
+	/*width: 10%;*/
+	height: 7px;
+	top: 50%;
+	transform: translateY(-50%);
+	transition: .2s ease-in-out;
+}
+
+.stick-bar-container {
+	background-color: black;
+	height: 10px;
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+}
+
+.stick-bar {
+	background-color: saddlebrown;
+	position: absolute;
+	/*width: 10%;*/
+	height: 7px;
+	top: 50%;
+	transform: translateY(-50%);
+	transition: .2s ease-in-out;
+}
+
+.exp-bar-container {
+	background-color: darkgoldenrod;
+	height: 10px;
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+}
+
+.exp-bar {
+	background-color: gold;
+	position: absolute;
+	/*width: 10%;*/
+	height: 7px;
+	top: 50%;
+	transform: translateY(-50%);
+	transition: .2s ease-in-out;
+}
+
+.item-bar-container {
+	background-color: black;
+	height: 3px;
+	width: 119%;
+	position: relative;
+	overflow: hidden;
+	top: -5px;
+	left: -4px;
+}
+
+.item-bar {
+	background-color: saddlebrown;
+	position: absolute;
+	/*width: 10%;*/
+	height: 1px;
+	top: 50%;
+	transform: translateY(-50%);
+	transition: .2s ease-in-out;
+}
+
+.page.main-menu,
+.page.create-char,
+.page.scene-1
+{
+	padding: 3rem;
+}
+
+.page.scene-1 p,
+.scene-2 p,
+.scene-0 p {
+	letter-spacing: 1px;
+	line-height: 25px;
+}
+
+.scene-0 {
+	margin: 1rem 0;
+}
+
+.scene-1 button {
+	margin-top: 2rem;
+}
+
+.scene-2 {
+	max-width: 400px;
+	margin: auto;
+	margin-top: 2rem;
+	font-size: 0.9em;
+}
+
+.game-over {
+	position: fixed;
+	z-index: 99;
+	background-color: rgba(255,255,240,0.95);
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	padding-top: 2rem;
+}
+
+.game-over button {
+	margin-top: 2rem;
+}
+
+.mute-container {
+	position: fixed;
+	right: 1rem;
+	top: 1rem;
+	/* border: 1px solid; */
+	width: 150px;
+	overflow: auto;
+	text-align: right;
+}
+
+.mute-container button {
+	box-shadow: 2px 2px 2px saddlebrown;
+	font-size: 1.3em;
+	padding: 2px 6px;
+}
+
+.mute-container strike {
+	color: #aaa;
+}
+
+.popup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: wheat;
+	padding: 1rem;
+	z-index: 2;
+}
+
+.enterfade-enter-active{
+  transition: opacity 2s;
+}
+
+.enterfade-enter /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+@keyframes heartbeat {
+	0% {transform: scale(1);}
+	50% {transform: scale(1.05);}
+	100% {transform: scale(1);}
+}

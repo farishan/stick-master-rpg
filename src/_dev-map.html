@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Stick Master RPG</title>
+	<link rel="stylesheet" href="framework.css">
+	<link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div id="app">
+
+	<div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+        <!-- Map -->
+        <div class="map" title="This is the map. Try to move with W, A, S, D or arrows">
+            <template v-for="(tile, i) in map">
+                <!-- <div v-bind:class="tile.isEdge ? 'edge-tile' : 'tile'" :key="i"> -->
+                <div class="tile" v-bind:class="{'edge-tile': tile.isEdge, 'marked-tile': tile.marked}" v-bind:style="{borderColor: char.color}" :key="i">
+
+                    <!-- Character Icon -->
+                    <span v-if="char.position == i" title="Your character">
+                        <b class="char" v-bind:style="{backgroundColor: char.color}"><span v-html="char.symbol"></span></b>
+                    </span>
+
+                    <!-- Enemy Icon -->
+                    <span v-if="enemy && enemy.position == i" title="..."><b class="enemy" v-bind:style="{backgroundColor: enemy.color}">=</b></span>
+
+                    <span v-if="enemy1 && enemy1.position == i" title="..."><b class="enemy" v-bind:style="{backgroundColor: enemy1.color}">=</b></span>
+
+                    <span v-if="enemy2 && enemy2.position == i" title="..."><b class="enemy" v-bind:style="{backgroundColor: enemy2.color}">=</b></span>
+                </div>
+            </template>
+        </div>
+    </div>
+
+	<!-- freesound.org
+	joedeshon - wooden-ball-against-wooden-window-shade
+	christopherderp - videogame-menu-button-click -->
+</div>
+<script src="vue.js"></script>
+<script src="database.js"></script>
+<script src="_dev-main-copy.js"></script>
+</body>
+</html>
